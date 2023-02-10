@@ -1,6 +1,6 @@
 package com.bobocode.cs;
 
-import com.bobocode.util.ExerciseNotCompletedException;
+import java.util.Objects;
 
 /**
  * {@link LinkedQueue} implements FIFO {@link Queue}, using singly linked nodes. Nodes are stores in instances of nested
@@ -16,13 +16,37 @@ import com.bobocode.util.ExerciseNotCompletedException;
  */
 public class LinkedQueue<T> implements Queue<T> {
 
+    private static class Node<T> {
+        T value;
+
+        Node<T> next; //previous
+
+        public Node(T value) {
+            this.value = value;
+        }
+    }
+
+    int size;
+
+    Node<T> head;
+
+    Node<T> tail;
+
     /**
      * Adds an element to the end of the queue.
      *
      * @param element the element to add
      */
     public void add(T element) {
-        throw new ExerciseNotCompletedException(); // todo: implement this method
+        Objects.requireNonNull(element);
+        Node<T> node = new Node<>(element);
+        if (isEmpty()) {
+            head = node;
+        } else {
+            tail.next = node;
+        }
+        tail = node;
+        size++;
     }
 
     /**
@@ -31,7 +55,15 @@ public class LinkedQueue<T> implements Queue<T> {
      * @return an element that was retrieved from the head or null if queue is empty
      */
     public T poll() {
-        throw new ExerciseNotCompletedException(); // todo: implement this method
+        T headValue = isEmpty() ? null : head.value;
+        if (head != null) {
+            head = head.next;
+            if (isEmpty()) {
+                tail = null;
+            }
+            size--;
+        }
+        return headValue;
     }
 
     /**
@@ -40,7 +72,7 @@ public class LinkedQueue<T> implements Queue<T> {
      * @return an integer value that is a size of queue
      */
     public int size() {
-        throw new ExerciseNotCompletedException(); // todo: implement this method
+        return size;
     }
 
     /**
@@ -49,6 +81,6 @@ public class LinkedQueue<T> implements Queue<T> {
      * @return {@code true} if the queue is empty, returns {@code false} if it's not
      */
     public boolean isEmpty() {
-        throw new ExerciseNotCompletedException(); // todo: implement this method
+        return head == null;
     }
 }
